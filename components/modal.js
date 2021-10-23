@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Story from "../lib/db/story";
+import Story from "../models/story";
 
 export default function Modal(props) {
   let [name, setName] = useState("");

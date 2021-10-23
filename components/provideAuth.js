@@ -1,4 +1,4 @@
-import { authContext, useProvideAuth } from "../lib/provideAuth.js";
+import { authContext, useProvideAuth } from "../auth/provideAuth.js";
 
 export function ProvideAuth({ children }) {
   const auth = useProvideAuth();
