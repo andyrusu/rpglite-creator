@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Head from "next/head";
 import Layout from "../components/layout";
-import Card from "../components/card";
+import Card from "../components/storyCard";
 import Modal from "../components/modal";
+import Story from "../models/story";
 
-export default function Home() {
+export default function Home(props) {
   let [modal, setModal] = useState(false);
 
   return (
@@ -28,15 +29,12 @@ export default function Home() {
             </div>
           </div>
           <div className="columns is-centered">
-            <div className="column">
-              <Card />
-            </div>
-            <div className="column">
-              <Card />
-            </div>
-            <div className="column">
-              <Card />
-            </div>
+            {props.stories &&
+              props.stories.map((story) => (
+                <div className="column">
+                  <StoryCard model={story} />
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -48,3 +46,13 @@ export default function Home() {
 Home.getLayout = function getLayout(page) {
   return <Layout>{page}</Layout>;
 };
+
+export async function getServerSideProps() {
+  const stories = await Story.getAll();
+  // let stories = null;
+  // storiesPromise.then((data) => {
+  //   stories = data;
+  // });
+
+  return { props: { stories } };
+}

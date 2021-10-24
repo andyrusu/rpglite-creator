@@ -1,4 +1,4 @@
-import { useAuth } from "../../lib/provideAuth.js";
+import { useAuth } from "../../auth/provideAuth.js";
 import { withRouter } from "next/router";
 import { useEffect } from "react";
 import Head from "next/head";

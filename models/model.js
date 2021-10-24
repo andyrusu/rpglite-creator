@@ -1,51 +1,31 @@
 import {
   getFirestore,
   collection,
-  addDoc,
   setDoc,
   doc,
+  getDocs,
 } from "firebase/firestore";
 
 export default class Model {
   #collection = null;
   #converter = null;
   #ref = null;
-  #isNew = true;
-  #id = null;
-  #db = null;
-
-  constructor() {
-    this.#db = getFirestore();
-  }
-
-  get id() {
-    return this.#id;
-  }
+  isNew = true;
+  id = null;
 
   set converter(converterFunc) {
     this.#converter = converterFunc;
   }
 
   get converter() {
-    if (this.#converter) return this.#converter;
-    else {
-      return {
-        toFirestore: (attributes) => {
-          return attributes;
-        },
-        fromFirestore: (snapshot, options) => {
-          return this.constructor.factory(snapshot.data(options));
-        },
-      };
-    }
-  }
-
-  set collection(coll) {
-    this.#collection = coll;
-  }
-
-  get collection() {
-    return this.#collection;
+    return {
+      toFirestore: (attributes) => {
+        return attributes;
+      },
+      fromFirestore: (snapshot, options) => {
+        return this.constructor.factory(snapshot.data(options));
+      },
+    };
   }
 
   set attributes(attrs) {
@@ -66,16 +46,21 @@ export default class Model {
   }
 
   save(id = null) {
-    this.#id = id;
-    this.#ref = this.#isNew ? Model.create(this) : Model.update(this);
-    this.#isNew = false;
-    return this.#ref.id;
+    this.id = id;
+    this.#ref = this.isNew ? Model.create(this) : Model.update(this);
+    this.isNew = false;
+    this.id = this.id ? this.id : this.#ref.id;
+    return this.#ref;
   }
 
   generateDocRef() {
     return this.id == null
       ? doc(collection(getFirestore(), this.collection))
       : doc(getFirestore(), this.collection, this.id);
+  }
+
+  static getDb() {
+    return getFirestore();
   }
 
   static async create(model) {
@@ -95,7 +80,21 @@ export default class Model {
     );
   }
 
-  static get(id) {}
+  static get(model, id) {}
 
-  static getAll() {}
+  static async getAll() {
+    const querySnapshot = await getDocs(
+      collection(getFirestore(), this.collection)
+    );
+    let models = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const model = this.jsonFactory(data);
+      model.id = doc.id;
+
+      models.push(model);
+    });
+
+    return models;
+  }
 }

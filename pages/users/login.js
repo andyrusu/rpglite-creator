@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../../lib/provideAuth.js";
+import { useAuth } from "../../auth/provideAuth";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
