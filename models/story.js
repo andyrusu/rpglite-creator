@@ -17,8 +17,8 @@ export default class Story extends Model {
       name: data.name,
       description: data.description,
       coverImage: data.coverImage,
-      createdAt: data.createdAt ? data.createdAt.toString() : undefined,
-      updatedAt: data.updatedAt ? data.updatedAt.toString() : undefined,
+      createdAt: data.createdAt ? data.createdAt.toJSON() : null,
+      updatedAt: data.updatedAt ? data.updatedAt.toJSON() : null,
     };
   }
 

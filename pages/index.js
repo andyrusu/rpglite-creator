@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useToggle } from "../helpers/reactHooks";
 import Head from "next/head";
 import Layout from "../components/layout";
-import Card from "../components/storyCard";
+import StoryCard from "../components/storyCard";
 import Modal from "../components/modal";
 import Story from "../models/story";
 
 export default function Home(props) {
-  let [modal, setModal] = useState(false);
+  let [isCreateClicked, setIsCreateClicked] = useToggle();
 
   return (
     <>
@@ -19,7 +19,7 @@ export default function Home(props) {
             <div className="column is-2">
               <button
                 className="button is-primary"
-                onClick={() => setModal(!modal)}
+                onClick={setIsCreateClicked}
               >
                 <span className="icon is-small">
                   <i className="fas fa-plus"></i>
@@ -31,14 +31,14 @@ export default function Home(props) {
           <div className="columns is-centered">
             {props.stories &&
               props.stories.map((story) => (
-                <div className="column">
+                <div className="column" key={story.id}>
                   <StoryCard model={story} />
                 </div>
               ))}
           </div>
         </div>
       </section>
-      {modal && <Modal closeHandler={setModal} />}
+      {isCreateClicked && <Modal closeHandler={setIsCreateClicked} />}
     </>
   );
 }
@@ -48,11 +48,5 @@ Home.getLayout = function getLayout(page) {
 };
 
 export async function getServerSideProps() {
-  const stories = await Story.getAll();
-  // let stories = null;
-  // storiesPromise.then((data) => {
-  //   stories = data;
-  // });
-
-  return { props: { stories } };
+  return { props: { stories: await Story.getAll() } };
 }
