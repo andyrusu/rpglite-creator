@@ -4,18 +4,13 @@ import {
   setDoc,
   doc,
   getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 
 export default class Model {
-  #collection = null;
-  #converter = null;
   #ref = null;
   isNew = true;
   id = null;
-
-  set converter(converterFunc) {
-    this.#converter = converterFunc;
-  }
 
   get converter() {
     return {
@@ -45,6 +40,12 @@ export default class Model {
     return obj;
   }
 
+  generateDocRef() {
+    return this.id == null
+      ? doc(collection(getFirestore(), this.collection))
+      : doc(getFirestore(), this.collection, this.id);
+  }
+
   save(id = null) {
     this.id = id;
     this.#ref = this.isNew ? Model.create(this) : Model.update(this);
@@ -53,10 +54,12 @@ export default class Model {
     return this.#ref;
   }
 
-  generateDocRef() {
-    return this.id == null
-      ? doc(collection(getFirestore(), this.collection))
-      : doc(getFirestore(), this.collection, this.id);
+  update() {
+    return Model.update(this);
+  }
+
+  delete() {
+    Model.delete(this);
   }
 
   static getDb() {
@@ -80,8 +83,6 @@ export default class Model {
     );
   }
 
-  static get(model, id) {}
-
   static async getAll() {
     const querySnapshot = await getDocs(
       collection(getFirestore(), this.collection)
@@ -96,5 +97,12 @@ export default class Model {
     });
 
     return models;
+  }
+
+  static get(model, id) {}
+
+  static async delete(model) {
+    console.log("Delete: ", model, this.collection(), model.id);
+    await deleteDoc(doc(getFirestore(), model.collection, model.id));
   }
 }

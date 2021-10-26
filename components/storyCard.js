@@ -1,27 +1,27 @@
-import { Timestamp } from "@firebase/firestore";
 import { format } from "date-fns";
+import Story from "../models/story";
 
 export default function StoryCard(props) {
-  const timestamp = new Timestamp(
-    props.model.createdAt.seconds,
-    props.model.createdAt.nanoseconds
+  const story = Story.factory(props.model);
+  const dateFormatLong = format(
+    story.createdAt.toDate(),
+    "KK:mm a - d MMM yyyy"
   );
-  const dateFormatLong = format(timestamp.toDate(), "KK:mm a - d MMM yyyy");
-  const dateFormatShort = format(timestamp.toDate(), "yyyy-M-d");
+  const dateFormatShort = format(story.createdAt.toDate(), "yyyy-M-d");
 
   return (
     <div className="card">
       <header className="card-header">
-        <p className="card-header-title">{props.model.name}</p>
+        <p className="card-header-title">{story.name}</p>
       </header>
       <div className="card-image">
         <figure className="image is-4by3">
-          <img src={props.model.coverImage} alt={props.model.name} />
+          <img src={story.coverImage} alt={story.name} />
         </figure>
       </div>
       <div className="card-content">
         <div className="content">
-          {props.model.description}
+          {story.description}
           <br />
           <time dateTime={dateFormatShort}>{dateFormatLong}</time>
         </div>
@@ -33,7 +33,7 @@ export default function StoryCard(props) {
         <a href="#" className="card-footer-item">
           Publish
         </a>
-        <a href="#" className="card-footer-item">
+        <a href="#" className="card-footer-item" onClick={() => story.delete()}>
           Delete
         </a>
       </footer>

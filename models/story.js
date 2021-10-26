@@ -1,24 +1,27 @@
-import { serverTimestamp } from "firebase/firestore";
+import { Timestamp, serverTimestamp } from "firebase/firestore";
+import { toTimestamp } from "../helpers/date";
 import Model from "./model";
 
 export default class Story extends Model {
-  static factory(data) {
+  static factory(data, isNew = true) {
     return new Story(
       data.name,
       data.description,
       data.coverImage,
-      data.createdAt ? data.createdAt : undefined,
-      data.updatedAt ? data.updatedAt : undefined
+      toTimestamp(data.createdAt),
+      toTimestamp(data.updatedAt),
+      isNew
     );
   }
 
   static jsonFactory(data) {
+    const updatedAt = toTimestamp(data.updatedAt);
     return {
       name: data.name,
       description: data.description,
       coverImage: data.coverImage,
-      createdAt: data.createdAt ? data.createdAt.toJSON() : null,
-      updatedAt: data.updatedAt ? data.updatedAt.toJSON() : null,
+      createdAt: toTimestamp(data.createdAt).toJSON(),
+      updatedAt: updatedAt instanceof Timestamp ? updatedAt.toJSON() : null,
     };
   }
 
@@ -27,10 +30,12 @@ export default class Story extends Model {
     description,
     coverImage,
     createdAt = null,
-    updatedAt = null
+    updatedAt = null,
+    isNew = true
   ) {
     super();
     this.attributes = { name, description, coverImage, createdAt, updatedAt };
+    this.isNew = isNew;
   }
 
   get attributeNames() {
@@ -53,7 +58,7 @@ export default class Story extends Model {
         return attributes;
       },
       fromFirestore: (snapshot, options) => {
-        return Story.factory(snapshot.data(options));
+        return Story.factory(snapshot.data(options), false);
       },
     };
   }

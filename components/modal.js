@@ -1,20 +1,23 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Story from "../models/story";
+import { useOnClickOutside } from "../helpers/reactHooks";
 
 export default function Modal(props) {
-  let [name, setName] = useState("");
-  let [desc, setDesc] = useState("");
+  const ref = useRef();
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  useOnClickOutside(ref, props.closeHandler);
 
   return (
     <div className="modal is-active">
       <div className="modal-background"></div>
-      <div className="modal-card">
+      <div className="modal-card" ref={ref}>
         <header className="modal-card-head">
           <p className="modal-card-title">New Story</p>
           <button
             className="delete"
             aria-label="close"
-            onClick={() => props.closeHandler(false)}
+            onClick={() => props.closeHandler()}
           ></button>
         </header>
         <section className="modal-card-body">
@@ -63,12 +66,12 @@ export default function Modal(props) {
             onClick={() => {
               const story = new Story(name, desc, "");
               story.save();
-              props.closeHandler(false);
+              props.closeHandler();
             }}
           >
             Save
           </button>
-          <button className="button" onClick={() => props.closeHandler(false)}>
+          <button className="button" onClick={() => props.closeHandler()}>
             Cancel
           </button>
         </footer>
