@@ -1,8 +1,6 @@
 import { format } from "date-fns";
-import Story from "../models/story";
 
-export default function StoryCard(props) {
-  const story = Story.factory(props.model);
+export default function StoryCard({ story }) {
   const dateFormatLong = format(
     story.createdAt.toDate(),
     "KK:mm a - d MMM yyyy"

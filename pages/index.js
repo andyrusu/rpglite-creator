@@ -3,9 +3,9 @@ import Head from "next/head";
 import Layout from "../components/layout";
 import StoryCard from "../components/storyCard";
 import Modal from "../components/modal";
-import Story from "../models/story";
+import Story from "../db/models/story";
 
-export default function Home(props) {
+export default function Home({ stories }) {
   let [isCreateClicked, setIsCreateClicked] = useToggle();
 
   return (
@@ -29,10 +29,10 @@ export default function Home(props) {
             </div>
           </div>
           <div className="columns is-centered">
-            {props.stories &&
-              props.stories.map((story) => (
+            {stories &&
+              stories.map((story) => (
                 <div className="column" key={story.id}>
-                  <StoryCard model={story} />
+                  <StoryCard story={Story.factory(story, false)} />
                 </div>
               ))}
           </div>

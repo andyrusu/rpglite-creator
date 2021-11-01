@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
-import Story from "../models/story";
+import Story from "../db/models/story";
 import { useOnClickOutside } from "../helpers/reactHooks";
 
-export default function Modal(props) {
+export default function Modal({ closeHandler }) {
   const ref = useRef();
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
-  useOnClickOutside(ref, props.closeHandler);
+  useOnClickOutside(ref, closeHandler);
 
   return (
     <div className="modal is-active">
@@ -17,7 +17,7 @@ export default function Modal(props) {
           <button
             className="delete"
             aria-label="close"
-            onClick={() => props.closeHandler()}
+            onClick={closeHandler}
           ></button>
         </header>
         <section className="modal-card-body">
@@ -66,12 +66,12 @@ export default function Modal(props) {
             onClick={() => {
               const story = new Story(name, desc, "");
               story.save();
-              props.closeHandler();
+              closeHandler();
             }}
           >
             Save
           </button>
-          <button className="button" onClick={() => props.closeHandler()}>
+          <button className="button" onClick={closeHandler}>
             Cancel
           </button>
         </footer>
