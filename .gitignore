@@ -26,3 +26,6 @@ yarn-error.log*
 
 # Firebase
 fbexport
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
