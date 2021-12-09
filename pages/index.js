@@ -1,5 +1,6 @@
-import { useToggle } from "../helpers/reactHooks";
 import Head from "next/head";
+import { getAuth } from "@firebase/auth";
+import { useToggle } from "../helpers/reactHooks";
 import Layout from "../components/layout";
 import StoryCard from "../components/storyCard";
 import Modal from "../components/modal";
@@ -48,5 +49,14 @@ Home.getLayout = function getLayout(page) {
 };
 
 export async function getServerSideProps() {
+  console.log(getAuth().currentUser);
+  // if (!getAuth().currentUser) {
+  //   return {
+  //     redirect: {
+  //       destination: "/users/login",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
   return { props: { stories: await Story.getAll() } };
 }

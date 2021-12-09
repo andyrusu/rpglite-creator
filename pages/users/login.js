@@ -9,6 +9,10 @@ export default function Login() {
   let [email, setEmail] = useState("");
   let [pass, setPass] = useState("");
 
+  // if (auth.user) {
+  //   router.push("/");
+  // }
+
   return (
     <section className="hero is-primary is-fullheight">
       <Head>

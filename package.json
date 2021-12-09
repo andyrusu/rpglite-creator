@@ -13,8 +13,13 @@
     "csrf": "^3.1.0",
     "date-fns": "^2.25.0",
     "firebase": "^9.1.2",
+    "firebase-admin": "^10.0.0",
     "next": "^11.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "grunt": "^1.4.1",
+    "grunt-shell": "^3.0.1"
   }
 }

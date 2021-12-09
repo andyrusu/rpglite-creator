@@ -1,11 +1,4 @@
-import {
-  getFirestore,
-  collection,
-  setDoc,
-  doc,
-  getDocs,
-  deleteDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import Writer from "../writer";
 
 export default class Model {

@@ -1,6 +1,8 @@
 import "bulma/css/bulma.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { initializeApp } from "firebase/app";
+// import { connectAuthEmulator, getAuth } from "firebase/auth";
+// import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 import { ProvideAuth } from "../components/provideAuth";
 
 const firebaseConfig = {
@@ -15,8 +17,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+// console.log(app);
+// const db = getFirestore();
+// connectFirestoreEmulator(db, "localhost", 9100);
+// connectAuthEmulator(getAuth(), "http://localhost:9099");
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page);
 
   return getLayout(
@@ -25,3 +31,5 @@ export default function App({ Component, pageProps }) {
     </ProvideAuth>
   );
 }
+
+export default App;

@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  connectAuthEmulator,
 } from "firebase/auth";
 
 export const authContext = createContext();
